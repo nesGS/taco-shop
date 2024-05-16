@@ -2,7 +2,7 @@ package com.nestor.model;
 
 import java.util.List;
 
-import jakarta.validation.constraints.Size;
+import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Data
