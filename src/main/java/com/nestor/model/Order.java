@@ -12,7 +12,8 @@ import javax.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
-public class Order {	
+public class Order {
+	
 	private Long id;
 	private Date placedAt;
 	
@@ -24,18 +25,19 @@ public class Order {
 	private String deliveryCity;
 	@NotBlank(message="El estado es obligatorio")
 	private String deliveryState;
-	@NotBlank(message="El nombre es obligatorio")
+	@NotBlank(message="El codigo postal es obligatorio")
 	private String deliveryZip;
-	//@CreditCardNumber(message="No es un número de tarjeta válido")
+	//@CreditCardNumber(message="No es una tarjeta valida")
 	private String ccNumber;
-	@Pattern(regexp="^(0[1-9]|1[0-2])([\\/])([1-9][0-9])$", message="Debe estar formateada como MM/YY")
+	@Pattern(regexp="^(0[1-9]|1[0-2])([\\\\/])([1-9][0-9])$", message="Debe estar formateada como MM/YY")
 	private String ccExpiration;
-	@Digits(integer=3, fraction=0)
+	@Digits(integer=3, fraction=0, message="CVV invalido")
 	private String ccCVV;
 	
 	private List<Taco> tacos = new ArrayList<>();
 	
-	public void addDesingn(Taco design) {
+	public void addDesign(Taco design) {
 		tacos.add(design);
 	}
+
 }

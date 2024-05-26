@@ -1,9 +1,10 @@
 package com.nestor.web;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,6 @@ import com.nestor.model.Ingredient.Type;
 import com.nestor.model.Order;
 import com.nestor.model.Taco;
 
-import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -37,12 +37,11 @@ public class DesignTacoController {
 	@Autowired
 	private TacoRepository tacoRepo;
 	
+	
 	@GetMapping
 	public String showDesignForm(Model model) {
-
 		populateIngredients(model);
 		return "design";
-		
 	}
 	
 	@ModelAttribute(name="tktn")
@@ -62,23 +61,24 @@ public class DesignTacoController {
 	}
 	
 	@PostMapping
-	public String processDesign(@Valid @ModelAttribute(name="tktn") Taco design, Errors errors, Model model,@ModelAttribute Order order) {
+	public String processDesign(@Valid @ModelAttribute(name="tktn") Taco design, Errors errors, Model model, @ModelAttribute Order order) {
 		if(errors.hasErrors()) {
 			populateIngredients(model);
 			return "design";
 		}
 		Taco saved = tacoRepo.save(design);
-		order.addDesingn(saved);
+		order.addDesign(saved);
 		log.info("Designed Taco: "+saved);
 		return "redirect:/orders/current";
 	}
 	
 	public void populateIngredients(Model model) {
+		
 		List<Ingredient> ingredients = new ArrayList<>();
 		
 		ingredientRepo.findAll().forEach(i -> ingredients.add(i));
-			     
-			    
+		
+
 		Type[] types = Ingredient.Type.values();
 		for(Type type: types) {
 			model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
